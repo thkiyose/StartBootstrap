@@ -9,6 +9,12 @@
   <strong>Content:</strong>
   <%= @blog.content %>
 </p>
-
+<% if current_user.id != @blog.user_id %>
+  <% if current_user.favorites.find_by(blog_id: @blog.id).present? %>
+    <td><%= link_to 'いいね解除', favorite_path(id: @blog.id), method: :delete %></td>
+  <% else %>
+    <td><%= link_to 'いいね', favorites_path(blog_id: @blog.id), method: :post %></td>
+  <% end %>
+<% end %>
 <%= link_to 'Edit', edit_blog_path(@blog) %> |
 <%= link_to 'Back', blogs_path %>

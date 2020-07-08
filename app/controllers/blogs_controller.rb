@@ -1,5 +1,6 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :edit, :update, :destroy]
+  before_action :login_confirmation, only: [:index, :new, :show, :create, :update, :destroy]
 
   def top
   end
@@ -65,13 +66,18 @@ class BlogsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_blog
       @blog = Blog.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def blog_params
-      params.require(:blog).permit(:title, :content)
+      params.require(:blog).permit(:title, :content).merge(user_id:current_user.id)
+    end
+
+    def login_confirmation
+      unless logged_in?
+        redirect_to root_path
+        flash[:notice] = "ログインして下さい。"
+      end
     end
 end

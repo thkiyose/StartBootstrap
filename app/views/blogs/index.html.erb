@@ -1,10 +1,10 @@
-<p id="notice"><%= notice %></p>
-
+<%= link_to "TOPに戻る", root_path %>
 <h1>Blogs</h1>
 
 <table>
   <thead>
     <tr>
+      <th>UserName</th>
       <th>Title</th>
       <th>Content</th>
       <th colspan="3"></th>
@@ -14,11 +14,20 @@
   <tbody>
     <% @blogs.each do |blog| %>
       <tr>
+        <td><%= blog.user.name %></td>
         <td><%= blog.title %></td>
         <td><%= blog.content %></td>
         <td><%= link_to 'Show', blog %></td>
+
         <td><%= link_to 'Edit', edit_blog_path(blog) %></td>
         <td><%= link_to 'Destroy', blog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if current_user.id != blog.user_id %>
+          <% if current_user.favorites.find_by(blog_id: blog.id).present? %>
+            <td><%= link_to 'いいね解除', favorite_path(id: blog.id), method: :delete %></td>
+          <% else %>
+            <td><%= link_to 'いいね', favorites_path(blog_id: blog.id), method: :post %></td>
+          <% end %>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

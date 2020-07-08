@@ -1,0 +1,13 @@
+<%= link_to "TOPに戻る", root_path %>
+<div class="user_info">
+  <h1><%= @user.name %>のページ</h1>
+  <p>メールアドレス: <%= @user.email %></p>
+</div>
+<h2><%= @user.name %>がいいねしたブログ一覧</h2>
+<% @user.favorites_blogs.each do |blog| %>
+  <div class="show_favorites_blogs">
+    <p>投稿者：<%= blog.user.name %></p>
+    <p>タイトル：<%= blog.title %></p>
+    <p>内容：<%= blog.content %></p>
+  </div>
+<% end %>
